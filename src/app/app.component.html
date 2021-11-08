@@ -1,0 +1,84 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+  <div class="row">
+
+    <section class="content">
+      <h1>My Movies List</h1>
+      <div class="col-md-8 col-md-offset-2">
+        <div class="input-group rounded">
+          <div>
+            <input id="search" type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
+              aria-describedby="search-addon" />
+            <button (click)="searchMovies()" class="btn btn-outline-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
+                </path>
+              </svg>
+            </button>
+            <span class="input-group-text border-0" id="search-addon">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="pull-right">
+              <div class="btn-group">
+                <button (click)="filterMovies()" type="button" class="btn btn-warning btn-filter"
+                  data-target="pagado">Favoritos</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="table table-filter" id="movie-table">
+                <tbody>
+                  <tr data-status="pagado" *ngFor="let movie of movies;">
+                    <td>
+                      <ng-template [ngIf]="movie.favorite" [ngIfElse]="uncheckedStar">
+                        <button (click)="checkStar(movie.id)" class="star star-checked">
+                          <i class="glyphicon glyphicon-star"></i>
+                        </button>
+                      </ng-template>
+                      <ng-template #uncheckedStar>
+                        <button (click)="checkStar(movie.id)" class="star" id="star{{movie.id}}">
+                          <i class="glyphicon glyphicon-star"></i>
+                        </button>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <div class="media">
+                        <a href="#" class="pull-left">
+                          <img src={{movie.imageUrl}} class="media-photo">
+                        </a>
+                        <div class="media-body">
+                          <span class="media-meta pull-right">{{movie.rating}}</span>
+                          <h4 class="title">
+                            {{movie.name}}
+                            <span class="pull-right pagado">(Favorito)</span>
+                          </h4>
+                          <p class="summary">{{movie.launchDate}}</p>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="content-footer">
+          <p>
+            Page © - 2016 <br>
+            Powered By <a href="https://www.facebook.com/tavo.qiqe.lucero" target="_blank">TavoQiqe</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
