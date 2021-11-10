@@ -1,4 +1,4 @@
-package com.mymovieslist.My.Movies.List.model;
+package com.mymovieslist.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,27 +35,27 @@ public class Movie implements Serializable {
                 "id=" + id +
                 ", titleId=" + titleId + '\'' +
                 ", name=" + name + '\'' +
-                ", Year=" + this.getLaunchDate() + '\'' +
-                ", Rating=" + this.getRating() + '\'' +
-                ", ImageUrl=" + this.getImageUrl() + '\'' +
-                ", Favorite=" + this.getFavorite() + '\'' +
+                ", Year=" + this.launchDate + '\'' +
+                ", Rating=" + this.rating + '\'' +
+                ", ImageUrl=" + this.imageUrl + '\'' +
+                ", Favorite=" + this.favorite + '\'' +
                 "}";
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
-        id = id;
+        this.id = id;
     }
 
-    public String getTitleId() {return titleId; }
+    public String getTitleId() {return this.titleId; }
 
-    public void setTitleId(String title_id) { titleId = title_id; }
+    public void setTitleId(String titleId) { this.titleId = titleId; }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -63,7 +63,7 @@ public class Movie implements Serializable {
     }
 
     public String getLaunchDate() {
-        return launchDate;
+        return this.launchDate;
     }
 
     public void setLaunchDate(String launchDate) {
@@ -71,7 +71,7 @@ public class Movie implements Serializable {
     }
 
     public String getRating() {
-        return rating;
+        return this.rating;
     }
 
     public void setRating(String rating) {
@@ -79,7 +79,7 @@ public class Movie implements Serializable {
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return this.imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
@@ -87,7 +87,7 @@ public class Movie implements Serializable {
     }
 
     public Boolean getFavorite() {
-        return favorite;
+        return this.favorite;
     }
 
     public void setFavorite(Boolean favorite) {

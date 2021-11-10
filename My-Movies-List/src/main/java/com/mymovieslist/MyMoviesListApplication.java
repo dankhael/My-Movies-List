@@ -1,4 +1,4 @@
-package com.mymovieslist.My.Movies.List;
+package com.mymovieslist;
 
 
 import org.apache.catalina.filters.CorsFilter;

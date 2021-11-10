@@ -1,4 +1,4 @@
-package com.mymovieslist.My.Movies.List;
+package com.mymovieslist;
 
 import com.mymovieslist.My.Movies.List.model.Movie;
 import com.mymovieslist.My.Movies.List.service.ImdbService;
