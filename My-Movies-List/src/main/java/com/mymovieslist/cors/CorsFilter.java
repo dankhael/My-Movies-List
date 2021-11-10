@@ -1,5 +1,5 @@
 
-package com.mymovieslist.My.Movies.List.cors;
+package com.mymovieslist.cors;
 
 import java.io.IOException;
 import javax.servlet.Filter;

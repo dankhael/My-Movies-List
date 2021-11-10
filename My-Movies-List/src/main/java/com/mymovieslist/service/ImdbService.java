@@ -1,4 +1,4 @@
-package com.mymovieslist.My.Movies.List.service;
+package com.mymovieslist.service;
 
 import com.mymovieslist.My.Movies.List.model.Movie;
 import com.mymovieslist.My.Movies.List.repo.MovieRepo;

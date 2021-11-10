@@ -1,4 +1,4 @@
-package com.mymovieslist.My.Movies.List.repo;
+package com.mymovieslist.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.mymovieslist.My.Movies.List.model.Movie;
