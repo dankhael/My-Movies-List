@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
   public searchMovies(): void {
     this.movieService.searchImdbMovies(this.searchInput).subscribe(
       (response: void) => {
-        console.log(response);
         this.movieService.searchMovies(this.searchInput).subscribe(
           (response: Movie[]) => {
             this.searchList = response;

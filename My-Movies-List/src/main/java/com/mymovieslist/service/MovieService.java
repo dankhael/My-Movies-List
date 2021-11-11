@@ -50,7 +50,6 @@ public class MovieService {
             if (this.existsMovieByTitleId(movie.getTitleId())) {
                 System.out.println("Movie already on Database");
             } else {
-                System.out.println(movie);
                 this.addMovie(movie);
             }
         }

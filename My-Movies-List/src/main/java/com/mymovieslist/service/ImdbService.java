@@ -65,20 +65,13 @@ public class ImdbService {
     }
 
     public ArrayList<ImdbMovie> getMovies(String search) {
-        System.out.println(myKey);
-        System.out.println(ratingsRequest);
-        System.out.println(searchRequest);
         HttpURLConnection connection = null;
         String searchResponse = getUrlResponse(connection, searchRequest+myKey+search);
-        System.out.println(searchResponse);
         JsonArray searchJson = parseSearch(searchResponse);
         ArrayList<ImdbMovie> movieArray = new ArrayList<ImdbMovie>();
         for (JsonElement movieJson : searchJson ) {
             JsonObject objectJson = movieJson.getAsJsonObject();
-            System.out.println(objectJson);
-            System.out.println(ratingsRequest+myKey+objectJson.get("id").getAsString());
             String ratingsJson = getUrlResponse(connection, ratingsRequest+myKey+objectJson.get("id").getAsString());
-            System.out.println(ratingsJson);
             ImdbMovie imdbMovie = new ImdbMovie(objectJson, ratingsJson);
             movieArray.add(imdbMovie);
         }

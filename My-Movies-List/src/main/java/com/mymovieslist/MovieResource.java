@@ -38,7 +38,6 @@ public class MovieResource {
 
     @PutMapping("/update")
     public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie) {
-        System.out.println(movie);
         Movie updateMovie = movieService.updateMovie(movie);
         return new ResponseEntity<>(updateMovie, HttpStatus.OK);
     }

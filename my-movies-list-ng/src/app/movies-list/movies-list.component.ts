@@ -17,7 +17,6 @@ export class MoviesListComponent implements OnInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges){
-    console.log(changes);
   }
 
 
