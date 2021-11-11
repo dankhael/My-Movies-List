@@ -1,8 +1,8 @@
 package com.mymovieslist;
 
-import com.mymovieslist.My.Movies.List.model.Movie;
-import com.mymovieslist.My.Movies.List.service.ImdbService;
-import com.mymovieslist.My.Movies.List.service.MovieService;
+import com.mymovieslist.model.Movie;
+import com.mymovieslist.service.ImdbService;
+import com.mymovieslist.service.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,7 @@ public class MovieResource {
     public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie, @PathVariable("id") Long id) {
         System.out.println(movie);
         System.out.println(id);
-        Movie updateMovie = movieService.updateMovie(id, movie);
+        Movie updateMovie = movieService.updateMovie(movie);
         return new ResponseEntity<>(updateMovie, HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class MovieResource {
     @PostMapping("/imdb/{name}")
     public  ResponseEntity<?> getImdbMovies(@PathVariable("name") String name){
         System.out.println("STARTING IMDB REQUEST");
-        movieService.AddImdbMovies(name);
+        movieService.addImdbMovies(name);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

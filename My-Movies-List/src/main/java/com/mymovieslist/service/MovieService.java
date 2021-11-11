@@ -1,18 +1,24 @@
 package com.mymovieslist.service;
 
-import com.mymovieslist.My.Movies.List.exception.MovieNotFoundException;
-import com.mymovieslist.My.Movies.List.model.Movie;
-import com.mymovieslist.My.Movies.List.repo.MovieRepo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mymovieslist.exception.MovieNotFoundException;
+import com.mymovieslist.model.ImdbMovie;
+import com.mymovieslist.model.Movie;
+import com.mymovieslist.repo.MovieRepo;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
- import java.util.List;
+import java.util.List;
 import java.util.*;
 
 @Service
 public class MovieService {
     private final MovieRepo movieRepo;
     private final ImdbService imdbService;
+    private final Gson gson = new Gson();
 
     @Autowired
     public MovieService(MovieRepo movieRepo, ImdbService imdbService) {
@@ -39,13 +45,13 @@ public class MovieService {
     }
 
     public void addImdbMovies(String search) {
-        Movie[] imdbMovies = imdbService.getMovies(search);
-        for ( int i = 0; i< imdbMovies.length; i++) {
-            Movie loopMovie = imdbMovies[i];
-            if (this.existsMovieByTitleId(loopMovie.getTitleId())) {
-                this.addMovie(loopMovie);
-            } else {
-                System.out.println("Movie Already Exists");
+        ArrayList<ImdbMovie> imdbMovies = imdbService.getMovies(search);
+        for (ImdbMovie imdbMovie : imdbMovies) {
+            Movie movie = parseMovie(imdbMovie.getSearchJson(), imdbMovie.getRatingsJson());
+            if (this.existsMovieByTitleId(movie.getTitleId())){
+                System.out.println("Movie already on Database");
+            } else{
+            this.addMovie(movie);
             }
         }
     }
@@ -55,7 +61,7 @@ public class MovieService {
     }
 
     public List<Movie> findMoviesByName(String name){
-        return movieRepo.findMoviesByNameContains(name);
+        return movieRepo.findMoviesByNameContains(name).orElseThrow(() -> new MovieNotFoundException("Movies by Name"+ name + "were not found"));
     }
 
     public boolean existsMovieByTitleId(String titleId) {
@@ -66,4 +72,32 @@ public class MovieService {
         }
     }
 
+
+    public Movie parseMovie(JsonObject searchJson, String ratingString) {
+        JsonObject ratingJson = gson.fromJson(ratingString, JsonObject.class);
+
+        // Get values from the first searchJson
+        String titleId = searchJson.get("id").getAsString();
+        String name = searchJson.get("name").getAsString();
+        String imageUrl = searchJson.get("image").getAsString();
+        int launchDate;
+        Double rating;
+
+        // Get values from the ratingJson
+        try{
+            launchDate = ratingJson.get("year").getAsInt();
+        } catch( IllegalStateException e) {
+            launchDate = 0;
+            System.out.println("Launch date not found");
+        }
+        try{
+            rating = ratingJson.get("imDb").getAsDouble();
+        } catch( IllegalStateException e) {
+            rating = 0.0;
+            System.out.println("Rating not found");
+        }
+        Movie movie = new Movie(titleId, name, launchDate, rating, imageUrl);
+        return movie;
+
+    }
 }
