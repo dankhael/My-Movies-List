@@ -1,8 +1,7 @@
 package com.mymovieslist;
 
-import com.mymovieslist.My.Movies.List.model.Movie;
-import com.mymovieslist.My.Movies.List.service.ImdbService;
-import com.mymovieslist.My.Movies.List.service.MovieService;
+import com.mymovieslist.model.Movie;
+import com.mymovieslist.service.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +12,9 @@ import java.util.List;
 @RequestMapping("/movie")
 public class MovieResource {
     private final MovieService movieService;
-    private final ImdbService imdbService;
 
-    public MovieResource(MovieService movieService, ImdbService imdbService) {
+    public MovieResource(MovieService movieService) {
         this.movieService = movieService;
-        this.imdbService = imdbService;
     }
 
     @GetMapping("/all")
@@ -38,11 +35,10 @@ public class MovieResource {
         return new ResponseEntity<>(newMovie, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie, @PathVariable("id") Long id) {
+    @PutMapping("/update")
+    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie) {
         System.out.println(movie);
-        System.out.println(id);
-        Movie updateMovie = movieService.updateMovie(id, movie);
+        Movie updateMovie = movieService.updateMovie(movie);
         return new ResponseEntity<>(updateMovie, HttpStatus.OK);
     }
 
@@ -53,15 +49,21 @@ public class MovieResource {
     }
 
     @PostMapping("/imdb/{name}")
-    public  ResponseEntity<?> getImdbMovies(@PathVariable("name") String name){
+    public ResponseEntity<?> getImdbMovies(@PathVariable("name") String name) {
         System.out.println("STARTING IMDB REQUEST");
-        movieService.AddImdbMovies(name);
+        movieService.addImdbMovies(name);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/find_name/{name}")
     public ResponseEntity<List<Movie>> getMoviesByName(@PathVariable("name") String name) {
         List<Movie> movies = movieService.findMoviesByName(name);
+        return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<Movie>> getMoviesByFavorite() {
+        List<Movie> movies = movieService.findMoviesByFavorite(true);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 }

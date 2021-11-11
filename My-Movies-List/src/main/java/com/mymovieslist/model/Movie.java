@@ -12,18 +12,18 @@ public class Movie implements Serializable {
     private Long id;
     private String titleId;
     private String name;
-    private String launchDate;
-    private String rating;
+    private int launchDate;
+    private Double rating;
     private String imageUrl;
 
     private Boolean favorite;
 
     public Movie() {}
 
-    public Movie(String title_id, String name, String launch_date, String rating, String imageUrl) {
-        this.titleId = title_id;
+    public Movie(String titleId, String name, int launchDate, Double rating, String imageUrl) {
+        this.titleId = titleId;
         this.name = name;
-        this.launchDate = launch_date;
+        this.launchDate = launchDate;
         this.rating = rating;
         this.imageUrl = imageUrl;
         this.favorite = false;
@@ -62,19 +62,19 @@ public class Movie implements Serializable {
         this.name = name;
     }
 
-    public String getLaunchDate() {
+    public int getLaunchDate() {
         return this.launchDate;
     }
 
-    public void setLaunchDate(String launchDate) {
+    public void setLaunchDate(int launchDate) {
         this.launchDate = launchDate;
     }
 
-    public String getRating() {
+    public Double getRating() {
         return this.rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 

@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.Arrays;
 import org.slf4j.Logger;
 
-import com.mymovieslist.My.Movies.List.model.Movie;
+import com.mymovieslist.model.Movie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;

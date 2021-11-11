@@ -1,12 +1,14 @@
 package com.mymovieslist.service;
 
-import com.mymovieslist.My.Movies.List.model.Movie;
-import com.mymovieslist.My.Movies.List.repo.MovieRepo;
-import com.mymovieslist.My.Movies.List.service.MovieService;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import com.mymovieslist.model.ImdbMovie;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -14,15 +16,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 @Service
 public class ImdbService {
+    @Value("${api.imdbKey}")
+    private String myKey;
 
-    public static String get_url_response(HttpURLConnection connection, String url){
+    private String searchRequest = "https://imdb-api.com/en/API/SearchMovie/"+myKey+"/";
+    private String ratingsRequest = "https://imdb-api.com/en/API/Ratings/"+myKey+"/";
+
+    public static String getUrlResponse(HttpURLConnection connection, String url){
         String result = new String();
         try {
-            URL search_url = new URL(url);
-            connection = (HttpURLConnection)search_url.openConnection();
+            URL searchUrl = new URL(url);
+            connection = (HttpURLConnection)searchUrl.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
 
@@ -44,43 +52,31 @@ public class ImdbService {
         return result;
     }
 
-    public static Movie[] getMovies(String search) {
-        HttpURLConnection connection = null;
-        final String myKey = "k_qa229e40";
-        final String search_request = "https://imdb-api.com/en/API/SearchMovie/"+myKey+"/";
-        final String ratings_request = "https://imdb-api.com/en/API/Ratings/"+myKey+"/";
-        String search_response = get_url_response(connection, search_request+search);
-        JSONObject search_object = new JSONObject(search_response);
-        JSONArray search_results = search_object.getJSONArray("results");
-        System.out.println("Search Results "+ search_results);
-        Movie[] MovieArray = new Movie[search_results.length()];
-        for (int i=0; i<MovieArray.length; i++) {
-            JSONObject movieJSON = search_results.getJSONObject(i);
-            String movieName = movieJSON.getString("title");
-            String id = movieJSON.getString("id");
-            String ratings_response = get_url_response(connection, ratings_request+id);
-            JSONObject ratingsJSON = new JSONObject(ratings_response);
-            String launchDate = "";
-            String rating = "";
-            String imageUrl = movieJSON.getString("image");
-            try {
-                launchDate = ratingsJSON.getString("year");
-            } catch (JSONException e) {
-                ;
-            }
-            try {
-                rating = ratingsJSON.getString("imDb");;
-            } catch (JSONException e) {
-                ;
-            }
-
-            Movie LoopMovie = new Movie(id, movieName, launchDate, rating, imageUrl);
-            System.out.println(LoopMovie);
-
-            MovieArray[i] = LoopMovie;
+    public static JsonArray parseSearch(String search) {
+        Gson gson = new Gson();
+        JsonObject searchJson = gson.fromJson(search, JsonObject.class);
+        JsonArray results = new JsonArray();
+        try{
+            results = searchJson.getAsJsonArray("results");
+        } catch (IllegalStateException e) {
+            System.out.print("Error trying to get API results.\nPossibly maximum usage of API calls.");
         }
-        System.out.println(MovieArray);
-        return MovieArray;
+        return results;
+    }
+
+    public ArrayList<ImdbMovie> getMovies(String search) {
+        HttpURLConnection connection = null;
+        String searchResponse = getUrlResponse(connection, searchRequest+search);
+        JsonArray searchJson = parseSearch(searchResponse);
+        ArrayList<ImdbMovie> movieArray = new ArrayList<ImdbMovie>();
+        for (JsonElement movieJson : searchJson ) {
+            JsonObject objectJson = movieJson.getAsJsonObject();
+            String ratingsJson = getUrlResponse(connection, ratingsRequest+objectJson.get("id"));
+            ImdbMovie imdbMovie = new ImdbMovie(objectJson, ratingsJson);
+            movieArray.add(imdbMovie);
+        }
+
+        return movieArray;
     }
 
 }
