@@ -16,12 +16,16 @@ export class MovieListService {
     return this.http.get<Movie[]>(`${this.apiServerUrl}/movie/all`)
   }
 
+  public getFavoriteMovies(): Observable<Movie[]> {
+    return this.http.get<Movie[]>(`${this.apiServerUrl}/movie/favorites`)
+  }
+
   public addMovie(movie: Movie): Observable<Movie> {
     return this.http.post<Movie>(`${this.apiServerUrl}/movie/add`, movie)
   }
 
-  public updateMovie(movie: Movie, movieId: bigint): Observable<Movie> {
-    return this.http.put<Movie>(`${this.apiServerUrl}/movie/update/${movieId}`, movie)
+  public updateMovie(movie: Movie): Observable<Movie> {
+    return this.http.put<Movie>(`${this.apiServerUrl}/movie/update`, movie)
   }
 
   public deleteMovie(movieId: bigint): Observable<void> {

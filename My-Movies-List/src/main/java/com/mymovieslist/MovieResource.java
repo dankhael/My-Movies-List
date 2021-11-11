@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,8 @@ public class MovieResource {
         return new ResponseEntity<>(updateMovie, HttpStatus.OK);
     }
 
-    @PostMapping("/delete/{id}")
+    @Transactional
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteMovie(@PathVariable("id") Long id) {
         movieService.deleteMovie(id);
         return new ResponseEntity<>(HttpStatus.OK);

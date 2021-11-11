@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Movie implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = true)
     private Long id;
     private String titleId;

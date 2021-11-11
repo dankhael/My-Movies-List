@@ -50,6 +50,7 @@ public class MovieService {
             if (this.existsMovieByTitleId(movie.getTitleId())) {
                 System.out.println("Movie already on Database");
             } else {
+                System.out.println(movie);
                 this.addMovie(movie);
             }
         }
@@ -67,9 +68,9 @@ public class MovieService {
 
     public boolean existsMovieByTitleId(String titleId) {
         if (movieRepo.findMovieByTitleId(titleId).isEmpty()) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -88,7 +89,7 @@ public class MovieService {
 
         // Get values from the first searchJson
         String titleId = searchJson.get("id").getAsString();
-        String name = searchJson.get("name").getAsString();
+        String name = searchJson.get("title").getAsString();
         String imageUrl = searchJson.get("image").getAsString();
         int launchDate;
         Double rating;
@@ -96,13 +97,13 @@ public class MovieService {
         // Get values from the ratingJson
         try {
             launchDate = ratingJson.get("year").getAsInt();
-        } catch (IllegalStateException e) {
+        } catch (NumberFormatException e) {
             launchDate = 0;
             System.out.println("Launch date not found");
         }
         try {
             rating = ratingJson.get("imDb").getAsDouble();
-        } catch (IllegalStateException e) {
+        } catch (NumberFormatException e) {
             rating = 0.0;
             System.out.println("Rating not found");
         }

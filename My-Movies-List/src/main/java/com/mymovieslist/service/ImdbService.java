@@ -21,10 +21,10 @@ import java.util.ArrayList;
 @Service
 public class ImdbService {
     @Value("${api.imdbKey}")
-    private String myKey;
+    public String myKey;
 
-    private String searchRequest = "https://imdb-api.com/en/API/SearchMovie/"+myKey+"/";
-    private String ratingsRequest = "https://imdb-api.com/en/API/Ratings/"+myKey+"/";
+    public String searchRequest = "https://imdb-api.com/en/API/SearchMovie/";
+    public String ratingsRequest = "https://imdb-api.com/en/API/Ratings/";
 
     public static String getUrlResponse(HttpURLConnection connection, String url){
         String result = new String();
@@ -65,13 +65,20 @@ public class ImdbService {
     }
 
     public ArrayList<ImdbMovie> getMovies(String search) {
+        System.out.println(myKey);
+        System.out.println(ratingsRequest);
+        System.out.println(searchRequest);
         HttpURLConnection connection = null;
-        String searchResponse = getUrlResponse(connection, searchRequest+search);
+        String searchResponse = getUrlResponse(connection, searchRequest+myKey+search);
+        System.out.println(searchResponse);
         JsonArray searchJson = parseSearch(searchResponse);
         ArrayList<ImdbMovie> movieArray = new ArrayList<ImdbMovie>();
         for (JsonElement movieJson : searchJson ) {
             JsonObject objectJson = movieJson.getAsJsonObject();
-            String ratingsJson = getUrlResponse(connection, ratingsRequest+objectJson.get("id"));
+            System.out.println(objectJson);
+            System.out.println(ratingsRequest+myKey+objectJson.get("id").getAsString());
+            String ratingsJson = getUrlResponse(connection, ratingsRequest+myKey+objectJson.get("id").getAsString());
+            System.out.println(ratingsJson);
             ImdbMovie imdbMovie = new ImdbMovie(objectJson, ratingsJson);
             movieArray.add(imdbMovie);
         }

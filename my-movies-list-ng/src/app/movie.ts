@@ -2,8 +2,8 @@ export interface Movie {
     id: bigint;
     titleId: string;
     name: string;
-    launchDate: string;
-    rating: string;
+    launchDate: number;
+    rating: number;
     imageUrl: string;
     favorite: Boolean;
 }

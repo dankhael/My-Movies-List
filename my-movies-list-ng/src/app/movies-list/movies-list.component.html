@@ -1,0 +1,34 @@
+<div class="table-container">
+  <table class="table table-filter" id="movie-table">
+    <tbody>
+      <tr data-status="pagado" *ngFor="let movie of movies;">
+        <td>
+          <ng-template [ngIf]="movie.favorite" [ngIfElse]="uncheckedStar">
+            <button (click)="checkStar(movie.id)" class="star star-checked">
+              <i class="glyphicon glyphicon-star"></i>
+            </button>
+          </ng-template>
+          <ng-template #uncheckedStar>
+            <button (click)="checkStar(movie.id)" class="star" id="star{{movie.id}}">
+              <i class="glyphicon glyphicon-star"></i>
+            </button>
+          </ng-template>
+        </td>
+        <td>
+          <div class="media">
+            <a href="#" class="pull-left">
+              <img src={{movie.imageUrl}} class="media-photo">
+            </a>
+            <div class="media-body">
+              <span class="media-meta pull-right">{{movie.rating}}</span>
+              <h4 class="title">
+                {{movie.name}}
+              </h4>
+              <p class="summary">{{movie.launchDate}}</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
